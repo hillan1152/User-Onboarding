@@ -21,13 +21,13 @@ const SignUpForm = ({values, errors, touched, status}) => {
                     name = "name"
                     placeholder = "Name"
                 />
-                {touched.name && errors.name && console.log("Is it working?")}
+                {touched.name && errors.name && <p>{errors.name}</p>}
                 <Field
                     type = "text"
                     name = "email"
                     placeholder = "Email"
                 />
-                {touched.email && errors.email && <p>{";lasdjf;las df;lkasdj"}</p>}
+                {touched.email && errors.email && <p>{errors.email}</p>}
                 <Field
                     type = "text"
                     name = "password"
@@ -63,9 +63,9 @@ const FormikSignUpForm = withFormik({
             termsOfService: termsOfService || false
         };
     },
-    validationschema: Yup.object().shape({
-        name: Yup.string().required("Add Your Name"),
-        email: Yup.string().required("Let us know where we can contact you.")
+    validationSchema: Yup.object().shape({
+        name: Yup.string().required(console.log("Add Your Name")),
+        email: Yup.string().email().required("Let us know where we can contact you.")
     }),
     handleSubmit(values, { setStatus }) {
         axios.post("https://reqres.in/api/users", values)
