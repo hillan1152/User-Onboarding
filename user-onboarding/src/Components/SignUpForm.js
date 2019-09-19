@@ -7,11 +7,12 @@ import axios from "axios";
 const SignUpForm = ({values, errors, touched, status}) => {
     
     const [people, setPeople] = useState([]);
-    useEffect( () => {
-        if(status) {
-            setPeople([...people, status])
-        }
-    }, [status])
+    useEffect(
+        () => {
+          status && setPeople(people => [...people, status]);
+        },
+        [status]
+      );
     return (
         <div className = "signup-form">
             <Form>
@@ -20,11 +21,13 @@ const SignUpForm = ({values, errors, touched, status}) => {
                     name = "name"
                     placeholder = "Name"
                 />
+                {touched.name && errors.name && console.log("Is it working?")}
                 <Field
                     type = "text"
                     name = "email"
                     placeholder = "Email"
                 />
+                {touched.email && errors.email && <p>{";lasdjf;las df;lkasdj"}</p>}
                 <Field
                     type = "text"
                     name = "password"
@@ -38,11 +41,18 @@ const SignUpForm = ({values, errors, touched, status}) => {
                         checked = {values.termsOfService}
                     />
                 </label>
-                <button className = "submit">Sign Up!</button>
+                <button className = "submit" type="submit">Sign Up!</button>
             </Form>
+            {people.map(person => (
+                <ul key = {person.id}>
+                    <li>Name: {person.name}</li>
+                    <li>Email: {person.email}</li>
+                    <li>Password: {person.password}</li>
+                </ul>
+            ))}
         </div>
-    )
-}
+    );
+};
 
 const FormikSignUpForm = withFormik({
     mapPropsToValues({ name, email, password, termsOfService}) {
@@ -61,9 +71,9 @@ const FormikSignUpForm = withFormik({
         axios.post("https://reqres.in/api/users", values)
         .then(res => {
             setStatus(res.data);
+            console.log(res);
         })
         .catch(err => console.log("ERROR", err.res))
     }
 })(SignUpForm);
-console.log("This is the Formik", FormikSignUpForm);
 export default FormikSignUpForm;
